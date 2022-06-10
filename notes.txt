@@ -1,0 +1,5 @@
+/home/stein/Documents/python/arbotdef/arbotv7/bot2.py:258: RuntimeWarning: invalid value encountered in double_scalars
+  avg = df['value'].sum()/df['qtt'].sum()
+
+
+ATTENTION IL NE VERIFIE PAS SIL A ASSEZ POUR VENDRE OU BUY dans son propre wallet
