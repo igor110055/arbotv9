@@ -69,7 +69,9 @@ class Reporter():
         fee = df['fee'].sum()
         net = df['net_profit'].sum()
         trade_count = len(df)/2
-        avg = net/trade_count
+        avg = net/trade_count, 
+        max_profit = df['net_profit'].max()
+        max_value = df['value'].max()
         # print(df)
 
         return{
@@ -83,8 +85,7 @@ class Reporter():
             'net_profit':net,
             'average_profit':avg
         }
-        
-        
+
     def run(self, archive=False, store=False):
         df = pd.DataFrame(
             columns=[
@@ -112,14 +113,14 @@ class Reporter():
                 #print(f'no stats yet for {botname}')
                 pass
         df['minutes'] = df['time_span'].dt.total_seconds()/60
-        df['prof_per_m'] = df['net_profit']/df['minutes']
-        df['projected profit 1W'] = df['prof_per_m']*10080
-        df['projected profit 1M'] = df['prof_per_m']*43800
-        df['projected profit 1Y'] = df['prof_per_m']*525600
+        df['ppm'] = df['net_profit']/df['minutes']#profit per minute
+        df['PP 1W'] = df['ppm']*10080
+        df['PP 1M'] = df['ppm']*43800
+        df['PP 1Y'] = df['ppm']*525600
         # df['projected profit 1M'] = 
         printdf = df.sort_values(by=['net_profit'], ascending=False)
         printdf = printdf[printdf['net_profit']>0]
-        printdf = printdf[['time_span', 'ticker', 'crit_spread', 'trade_count', 'profit', 'fee', 'net_profit', 'average_profit', 'projected profit 1W', 'projected profit 1M', 'projected profit 1Y']]
+        printdf = printdf[['time_span', 'ticker', 'crit_spread', 'trade_count', 'profit', 'fee', 'net_profit', 'average_profit', 'PP 1W', 'PP 1M', 'PP 1Y']]
         printdf = printdf.round(
                 {
                 'trade_count':1,
@@ -127,10 +128,10 @@ class Reporter():
                 'fee':2,
                 'net_profit':2,
                 'average_profit':2,
-                'projected profit 1W':2, 
-                'projected profit 1M':2, 
-                'projected profit 1Y':2
-                 })
+                'PP 1W':2, 
+                'PP 1M':2, 
+                'PP 1Y':2
+                })
         print(printdf)
         name = datetime.datetime.now().strftime("%Y-%m-%d_%Hh%M")
         if store :
@@ -142,6 +143,22 @@ class Reporter():
                 os.remove(f'{self.path_to_folder}{file}')
             print('done')
         return(df)
+
+    def check_wallets(self):
+        print('checking wallets')
+        bots = self.get_bots()['name'].to_list()
+        bug = []
+        for bot in bots:
+            df = pd.read_csv(f'{self.path_to_folder}wallet_{bot}.csv', index_col=False)
+            ls = ['kraken_crypto', 'kraken_fiat', 'binance_crypto', 'binance_fiat']
             
+            for col in ls:
+                if len(df[df[col]<0])>0:
+                    # print(df)
+                    bug.append(bot)
+        if len(bug)>0:
+            print(f'Neg Wallets : {bug}')
+        else:
+            print('all good')
 
-
+Reporter().check_wallets()

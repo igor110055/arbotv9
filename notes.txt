@@ -2,4 +2,8 @@
   avg = df['value'].sum()/df['qtt'].sum()
 
 
-ATTENTION IL NE VERIFIE PAS SIL A ASSEZ POUR VENDRE OU BUY dans son propre wallet
+ATTENTION IL NE VERIFIE PAS SIL A ASSEZ POUR VENDRE OU BUY dans son propre wallet = rajouter une fct VERIFIY TRADE 
+verif trade checks si c' est bon et modifie en fction
+=> chck if min amounts ok, chnages order to max amount if short on wallet////integrer dans restrict ?
+
+faire un focntion verif wallet dans le reporter pour etre sur que des wallets buggent pas en neg

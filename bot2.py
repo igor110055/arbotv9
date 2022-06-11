@@ -12,7 +12,6 @@ import time
 
 r = RandomWord()
 
-
 class constructor:
     def __init__(self) -> None:
         pass
@@ -37,9 +36,7 @@ class constructor:
         rest = value - am
         return {"rest": rest, "fees": am}
 
-
 c = constructor()
-
 
 class Botmaker:
 
@@ -79,7 +76,6 @@ class Botmaker:
 
     def store_bot_list(self, botlist):
         pass
-
 
 class Bot:
     """Creates the bot, the args are passed by botmanager,
@@ -523,11 +519,13 @@ class Bot:
             profit = df.iloc[-1]["value"] - df.iloc[-2]["value"]
         fees = df["fee"].sum()
         net = profit - fees
-        #print("TRADE STORED :")
-        #print(df)
-        #print(f"PROFIT : {profit}, FEE : {fee}, NET PROFIT : {net}")
-        #print(wallet)
 
+    def validate_order(self, order):
+        '''checks if the order is OK to execute
+        can delete or modify existing order'''
+        wallet = self.wallet
+        if order['side'] == 'buy':
+            pass###on est la
 
 class Main_prog:
     """for test pupposes
@@ -639,4 +637,3 @@ class Main_prog:
             for th in ls :
                 th.stop()
             n+=1
-            
